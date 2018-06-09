@@ -99,14 +99,14 @@ public class MainActivity extends AppCompatActivity {
     private void setWinner(int winner) {
 
         String winnerName = winner == 1 ? playerOne : playerTwo;
-        winnerTextView.setText(winnerName + " won!");
+        winnerTextView.setText(winnerName.concat(" won!"));
         gameOver = true;
     }
 
     private void setCurrentPlayer() {
 
         String playerName = this.playerTurn == 1 ? playerOne : playerTwo;
-        winnerTextView.setText(playerName + "'s turn!");
+        winnerTextView.setText(playerName.concat("'s turn!"));
 
     }
 
@@ -144,10 +144,8 @@ public class MainActivity extends AppCompatActivity {
         if ((board[2].equals(board[4]) && board[2].equals(board[6]))) {
             if (!board[2].equals(" ")) {
                 setWinner(playerTurn);
-                return;
             }
         }
-
     }
 
     private void restartGame() {
