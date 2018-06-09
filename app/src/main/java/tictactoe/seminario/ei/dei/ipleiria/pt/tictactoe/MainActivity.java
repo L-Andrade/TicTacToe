@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.test.ServiceTestCase;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,14 +21,14 @@ public class MainActivity extends AppCompatActivity {
     private List<Button> buttons = new ArrayList<>();
     private Button restartButton;
 
-    String playerOne = "X";
-    String playerTwo = "O";
+    String playerOne = "Player 1";
+    String playerTwo = "Player 2";
 
     int playerTurn = 1;
 
     boolean gameOver = false;
 
-    private TextView winnerTextView;
+    private TextView infoTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        winnerTextView = findViewById(R.id.winnerTextView);
+        infoTextView = findViewById(R.id.infoTextView);
 
         setCurrentPlayer();
 
         for (Button button :
                 buttons) {
-            button.setText(" ");
+            button.setText("");
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -77,10 +76,9 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         isGameOver();
-                        playerTurn = (playerTurn == 1) ? 2 : 1;
 
                         if (!gameOver) {
-                            setCurrentPlayer();
+                            switchPlayerTurn();
                         }
 
                     }
@@ -93,21 +91,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean canClick(View view) {
-        return ((Button) view).getText().equals(" ") && !gameOver;
+        return ((Button) view).getText().equals("") && !gameOver;
     }
 
     private void setWinner(int winner) {
 
         String winnerName = winner == 1 ? playerOne : playerTwo;
-        winnerTextView.setText(winnerName.concat(" won!"));
+        infoTextView.setText(winnerName.concat(" won!"));
         gameOver = true;
     }
 
     private void setCurrentPlayer() {
-
         String playerName = this.playerTurn == 1 ? playerOne : playerTwo;
-        winnerTextView.setText(playerName.concat("'s turn!"));
+        infoTextView.setText(playerName.concat("'s turn!"));
 
+    }
+
+    private void switchPlayerTurn() {
+        playerTurn = (playerTurn == 1) ? 2 : 1;
+        setCurrentPlayer();
     }
 
     private void isGameOver() {
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 3; i++) {
             // Check horizontal
             if (board[i * 3].equals(board[1 + i * 3]) && board[i * 3].equals(board[2 + i * 3])) {
-                if (!board[i * 3].equals(" ")) {
+                if (!board[i * 3].equals("")) {
                     setWinner(playerTurn);
                     return;
                 }
@@ -127,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             // Check vertical
             if (board[i].equals(board[i + 3]) && board[i].equals(board[i + 2 * 3])) {
 
-                if (!board[i].equals(" ")) {
+                if (!board[i].equals("")) {
                     setWinner(playerTurn);
                     return;
                 }
@@ -136,13 +138,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Check diagonal
         if ((board[0].equals(board[4]) && board[0].equals(board[8]))) {
-            if (!board[0].equals(" ")) {
+            if (!board[0].equals("")) {
                 setWinner(playerTurn);
                 return;
             }
         }
         if ((board[2].equals(board[4]) && board[2].equals(board[6]))) {
-            if (!board[2].equals(" ")) {
+            if (!board[2].equals("")) {
                 setWinner(playerTurn);
             }
         }
@@ -151,11 +153,11 @@ public class MainActivity extends AppCompatActivity {
     private void restartGame() {
         for (Button button :
                 buttons) {
-            button.setText(" ");
+            button.setText("");
         }
-        playerTurn = 1;
         gameOver = false;
         setCurrentPlayer();
+        playerTurn = 1;
     }
 
     public static Intent getIntent(Context context, String playerOneName, String playerTwoName) {
